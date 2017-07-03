@@ -21,40 +21,26 @@ call vundle#rc(g:vim_home_path. "/bundle")
 
 Bundle 'gmarik/vundle'
 
-Plugin 'sourcegraph/sourcegraph-vim'
-
 " Language plugins
 Bundle "vim-ruby/vim-ruby"
-Bundle "bryanjswift/vim-rust"
+Bundle "tpope/vim-bundler"
 Bundle "empanda/vim-varnish"
-Bundle "groenewege/vim-less"
 Bundle "Glench/Vim-Jinja2-Syntax"
 Bundle "fatih/vim-go"
-Bundle "kchmck/vim-coffee-script"
-Bundle "PProvost/vim-ps1"
 Bundle "rodjek/vim-puppet"
 Bundle "tpope/vim-markdown"
-Bundle "vim-scripts/VimClojure"
 
 " Other plugins
 Bundle "godlygeek/tabular"
 Bundle "kien/ctrlp.vim"
 Bundle "Lokaltog/vim-easymotion"
-"Bundle "Lokaltog/vim-powerline"
-"Bundle 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}
 Bundle 'bling/vim-airline'
-"Bundle "mileszs/ack.vim"
+Bundle 'vim-airline/vim-airline-themes'
 Bundle "rking/ag.vim"
 Bundle "scrooloose/syntastic"
 Bundle "tpope/vim-eunuch"
 Bundle "tpope/vim-fugitive"
-"Bundle "msanders/snipmate.vim"
-Bundle "mhinz/vim-startify"
 
-" ruby blocks
-Bundle "tsaleh/vim-matchit"
-Bundle "kana/vim-textobj-user"
-Bundle "nelstrom/vim-textobj-rubyblock"
 
 " tagbar
 Bundle "majutsushi/tagbar"
@@ -63,12 +49,9 @@ Bundle "majutsushi/tagbar"
 Bundle 'mitchellh/vim-misc'
 
 " solarized
-Bundle "altercation/vim-colors-solarized"
+"Bundle 'altercation/vim-colors-solarized'
 
 Bundle "barn/Pychimp-vim"
-
-" NERDTree
-Bundle "scrooloose/nerdtree"
 
 Bundle "kevinw/pyflakes-vim"
 
@@ -82,22 +65,33 @@ Bundle 'kien/rainbow_parentheses.vim'
 
 Bundle 'tpope/vim-unimpaired'
 Bundle 'Shutnik/jshint2.vim'
-"Bundle 'vim-scripts/TabBar'
 Bundle 'SirVer/ultisnips'
 Bundle 'honza/vim-snippets'
-Bundle 'Shougo/neocomplete.vim'
+
+" neocomplete doesn't work with neovim, use deoplete.nvim instead.
+"Bundle 'Shougo/neocomplete.vim'
+Bundle 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Bundle 'zchee/deoplete-go', { 'do': 'make'}
+Bundle "fishbullet/deoplete-ruby"
+
 Bundle 'Shougo/neosnippet.vim'
 Bundle 'Shougo/neosnippet-snippets'
 Bundle 'ervandew/supertab'
 Bundle 'sjl/vitality.vim'
-Plugin 'nsf/gocode', {'rtp': 'vim/'}
-"Bundle 'davidhalter/jedi-vim'
 Bundle "markcornick/vim-terraform"
 
-"run shell in vim
-Bundle 'lrvick/Conque-Shell'
+" install colorscheme
+"Bundle 'morhetz/gruvbox'
+"Bundle 'tomasr/molokai'
 
-Bundle 'morhetz/gruvbox'
+" Dash integration
+Bundle 'rizzatti/dash.vim'
+
+Bundle 'martinda/Jenkinsfile-vim-syntax'
+
+Bundle 'mrtazz/vim-stencil'
+Bundle 'mrtazz/simplenote.vim'
+Bundle 'flazz/vim-colorschemes'
 
 " Turn on filetype plugin and indent loading so that loading the
 " vim-misc stuff below loads the proper files.
@@ -116,35 +110,35 @@ set t_Co=256
 "let g:solarized_contrast = "hard"
 "set background=light
 
-set background=dark
+"set background=dark
 "colorscheme solarized
-"colorscheme molokai
-colorscheme gruvbox
+colorscheme molokai
+
+"let g:molokai_original = 1
+let g:rehash256 = 1
+
+"colorscheme gruvbox
 
 map <C-K> :nohlsearch<CR>
 map <C-N><C-N> :set invnumber<CR>
-
-" remember previous cursos position
-if has("autocmd")
-    filetype plugin indent on
-    autocmd BufReadPost *
-                \ if line("'\"") > 0 && line("'\"") <= line("$") |
-                \   exe "normal g`\"" |
-                \ endif
-endif " has("autocmd")
 
 " change the mapleader from \ to ,
 let mapleader=","
 
 " RSpec.vim mappings
-"let g:rspec_command = 'call Send_to_Tmux("rspec {spec}\n")'
-let g:rspec_command = "Dispatch rspec {spec}"
+"let g:rspec_command = 'call Send_to_Tmux("bundle exec rspec {spec}\n")'
+"let g:rspec_command = "Dispatch rspec {spec}"
+let g:dispatch_compilers = {
+      \ 'latex': 'tex',
+      \ 'bundle exec': ''}
+
+let g:rspec_command = "Dispatch bundle exec rspec -f d -c {spec}"
 
 "let mapleader=","
-"map <Leader>t :call RunCurrentSpecFile()<CR>
-"map <Leader>s :call RunNearestSpec()<CR>
+map <Leader>t :call RunCurrentSpecFile()<CR>
+map <Leader>s :call RunNearestSpec()<CR>
 "map <Leader>l :call RunLastSpec()<CR>
-"map <Leader>a :call RunAllSpecs()<CR>
+map <Leader>a :call RunAllSpecs()<CR>
 
 " Quickly edit/reload the vimrc file
 nmap <silent> <leader>ev :e $MYVIMRC<CR>
@@ -253,7 +247,6 @@ au FileType go nmap gd <Plug>(go-def)
 map <Leader><Leader>c :!/usr/local/bin/ctags -R -f ./tags .  `python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()" `<CR>
 set tags+=tags;
 
-let g:go_fmt_autosave = 0
 
 set iskeyword=-,:,@,48-57,_,192-255
 set norelativenumber
@@ -266,11 +259,12 @@ set t_Co=256
 let g:airline#extensions#tabline#enabled = 1
 let g:airline_powerline_fonts=1
 "let g:airline_theme="bubblegum"
-let g:airline_theme="gruvbox"
+"let g:airline_theme="gruvbox"
+let g:airline_theme="powerlineish"
 
 let g:Powerline_symbols = 'fancy'
 
-set guifont=Inconsolata-dz\ for\ Powerline:h10
+set guifont=Inconsolata-dz\ for\ Powerline:h12
 
 " vim-go
 au FileType go nmap <Leader>s <Plug>(go-implements)
@@ -294,9 +288,12 @@ au FileType go nmap <silent><Leader>L :GoLint<CR>
 au FileType go nmap <silent><Leader>v :GoVet<CR>
 
 
+
+let g:go_fmt_autosave = 1
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_structs = 1
+let g:go_gocode_propose_builtins = 1
 
 " Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
 let g:UltiSnipsExpandTrigger="<tab>"
@@ -386,6 +383,60 @@ set nocursorline
 " same as centered cursor
 set scrolloff=5
 
-let g:SOURCEGRAPH_AUTO = "false"
-let g:SOURCEGRAPH_GOPATH = "/Users/dominikzyla/projects/go"
-let g:SOURCEGRAPH_GOBIN = "/usr/local/bin/go"
+set mouse=
+let g:python_host_prog='/usr/local/bin/python'
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#enable_refresh_always=0
+
+map <Leader>ct :silent !~/.rbenv/shims/ripper-tags -R --exclude=vendor && ~/.rbenv/shims/coffeetags -R -a -f tags<CR>
+
+iunmap jj
+iunmap jJ
+iunmap Jj
+iunmap JJ
+iunmap jk
+iunmap jK
+iunmap Jk
+iunmap JK
+
+source ~/.simplenoterc
+let g:StencilTemplatepath = "~/.vim/templates/"
+
+let g:SimplenoteFiletype = "markdown"
+
+function! SetupEnvironment()
+  let l:path = expand('%:p')
+  if l:path =~ '/Users/dom/src'
+    if &filetype == 'ruby'
+      setlocal ts=2 sts=2 sw=2
+    elseif &filetype == 'puppet'
+      setlocal ts=2 sts=2 sw=2
+    elseif &filetype == 'sh'
+      setlocal ts=2 sts=2 sw=2
+    elseif &filetype == 'php'
+      setlocal ts=2 sts=2 sw=2
+    endif
+  elseif l:path =~ '/Users/dom/src/SF'
+    if &filetype == 'ruby'
+      setlocal ts=4 sts=4 sw=4
+    elseif &filetype == 'puppet'
+      setlocal ts=4 sts=4 sw=4
+    elseif &filetype == 'sh'
+      setlocal ts=4 sts=4 sw=4
+    elseif &filetype == 'php'
+      setlocal ts=4 sts=4 sw=4
+    endif
+  endif
+endfunction
+autocmd! BufReadPost,BufNewFile * call SetupEnvironment()
+
+" remember previous cursos position
+if has("autocmd")
+    filetype plugin indent on
+    autocmd BufReadPost *
+                \ if line("'\"") > 0 && line("'\"") <= line("$") |
+                \   exe "normal g`\"" |
+                \ endif
+endif " has("autocmd")
+
+
