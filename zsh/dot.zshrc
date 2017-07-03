@@ -143,11 +143,6 @@ REPORTTIME=10
 # Nazwy procesów braæ z 'ps'
 zstyle ':completion:*:processes' command 'ps -aux'
 
-# jakie¶ lokalne ¶mieci
-if [ -r ${HOME}/.zshrc_local ]; then
-	. ${HOME}/.zshrc_local
-fi
-
 # vcs_info stuff
 setopt prompt_subst
 autoload -Uz vcs_info
@@ -178,15 +173,29 @@ export LD_LIBRARY_PATH=~/luit/lib
 LSCOLORS="ExGxFxdxCxDxDxhbadExEx"
 export LSCOLORS
 
-source /usr/local/share/zsh/site-functions/_aws
+#source /usr/local/share/zsh/site-functions/_aws
 
 export PATH="/usr/local/bin:/usr/local/sbin:$PATH"
 
-export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
 export PYTHONSTARTUP=~/.pythonrc
-source $HOME/.rvm/scripts/rvm
-export GOPATH=$HOME/projects/go
+export GOPATH=$HOME/src/go
 export PATH=$PATH:$GOPATH/bin:$GOROOT/bin/go
 
 alias tmux="TERM=screen-256color-bce tmux"
-$(boot2docker shellinit)
+
+#export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+#source $HOME/.rvm/scripts/rvm
+#export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
+
+
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
+
+# jakie¶ lokalne ¶mieci
+if [ -r ${HOME}/.zshrc_local ]; then
+	. ${HOME}/.zshrc_local
+else
+    echo "OMG"
+fi
+
+
