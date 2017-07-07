@@ -23,7 +23,6 @@ Bundle 'gmarik/vundle'
 
 " Language plugins
 Bundle "vim-ruby/vim-ruby"
-Bundle "tpope/vim-bundler"
 Bundle "empanda/vim-varnish"
 Bundle "Glench/Vim-Jinja2-Syntax"
 Bundle "fatih/vim-go"
@@ -40,8 +39,8 @@ Bundle "rking/ag.vim"
 Bundle "scrooloose/syntastic"
 Bundle "tpope/vim-eunuch"
 Bundle "tpope/vim-fugitive"
-
-
+"
+"
 " tagbar
 Bundle "majutsushi/tagbar"
 
@@ -92,6 +91,8 @@ Bundle 'martinda/Jenkinsfile-vim-syntax'
 Bundle 'mrtazz/vim-stencil'
 Bundle 'mrtazz/simplenote.vim'
 Bundle 'flazz/vim-colorschemes'
+Bundle "dracula/vim"
+
 
 " Turn on filetype plugin and indent loading so that loading the
 " vim-misc stuff below loads the proper files.
@@ -112,7 +113,8 @@ set t_Co=256
 
 "set background=dark
 "colorscheme solarized
-colorscheme molokai
+"colorscheme molokai
+colorscheme dracula
 
 "let g:molokai_original = 1
 let g:rehash256 = 1
@@ -385,8 +387,11 @@ set scrolloff=5
 
 set mouse=
 let g:python_host_prog='/usr/local/bin/python'
+let g:python3_host_prog='/usr/local/bin/python3'
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_refresh_always=0
+
+let g:fugitive_git_executable = '/usr/local/bin/git'
 
 map <Leader>ct :silent !~/.rbenv/shims/ripper-tags -R --exclude=vendor && ~/.rbenv/shims/coffeetags -R -a -f tags<CR>
 
