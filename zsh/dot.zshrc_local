@@ -1,0 +1,17 @@
+alias vim=$(which nvim)
+alias vi=$(which nvim)
+export EDITOR=nvim
+export GOPATH="${HOME}/src/go"
+export GOROOT="/usr/local/opt/go/libexec"
+
+eval "$(pyenv init -)"
+eval "$(pyenv virtualenv-init -)"
+
+#export PATH="/usr/local/opt/go/bin:$PATH"
+#export PATH="~/bin:/usr/local/opt/go/bin:${PATH}"
+export PATH="~/bin:${PATH}"
+
+autoload -U +X bashcompinit && bashcompinit
+complete -o nospace -C /Users/dzyla/Downloads/vault vault
+
+unsetopt share_history
