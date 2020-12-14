@@ -7,8 +7,11 @@ export ZSH=$HOME/.oh-my-zsh
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-#ZSH_THEME="afowler"
-ZSH_THEME="sunaku"
+##ZSH_THEME="afowler"
+#ZSH_THEME="sunaku"
+#ZSH_THEME="mh"
+#ZSH_THEME="terminalparty"
+ZSH_THEME="dracula"
 
 # Set list of themes to load
 # Setting this variable when ZSH_THEME=random
@@ -74,7 +77,7 @@ plugins=(
   github
   iterm2
   pip
-  pyenv
+  #pyenv
   pylint
   python
 )
@@ -120,11 +123,14 @@ bindkey "^f" emacs-forward-word
 bindkey "^b" emacs-backward-word
 bindkey "^w" backward-delete-word
 
-PROMPT='%{[01;31m%}[%D{%H:%M}]%{[22;39m%} %m%{[01;37m%}:%{[22;39m%}%{[33m%}%35<...<%{[39m%}%~ %(?..%{[01;31m%}(%?%)%{[22;39m%} )%(2L.%{[01;33m%}.%{[01;37m%})%(!.#.$)%{[22;39m%} '
-if [[ $TERM = rxvt || $TERM = *xterm* || $TERM = aterm || $TERM = Eterm ]]; then
-	PROMPT='%{]0;%n@%m%}'"$PROMPT"
-else
-fi
+#PROMPT='[%{$fg[$NCOLOR]%}%B%n%b%{$reset_color%}:%{$fg[red]%}%30<...<%~%<<%{$reset_color%}]%(?..%{[01;31m%}(%?%)%{[22;39m%} )%(!.#.$) '
+#PROMPT='%{]0;%n@%m%}'"$PROMPT"
+
+#PROMPT='%{[01;31m%}[%D{%H:%M}]%{[22;39m%} %m%{[01;37m%}:%{[22;39m%}%{[33m%}%35<...<%{[39m%}%~ %(?..%{[01;31m%}(%?%)%{[22;39m%} )%(2L.%{[01;33m%}.%{[01;37m%})%(!.#.$)%{[22;39m%} '
+#if [[ $TERM = rxvt || $TERM = *xterm* || $TERM = aterm || $TERM = Eterm ]]; then
+#	PROMPT='%{]0;%n@%m%}'"$PROMPT"
+#else
+#fi
 
 zmodload -i zsh/complist
 
@@ -137,25 +143,25 @@ compinit
 # Kolorowa lista.
 zstyle ':completion:*' list-colors ''
 
-# vcs_info stuff
-setopt prompt_subst
-autoload -Uz vcs_info
-zstyle ':vcs_info:*' actionformats \
-    '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
-zstyle ':vcs_info:*' formats       \
-    '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f '
-zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
-
-zstyle ':vcs_info:*' enable git cvs svn
-
-# or use pre_cmd, see man zshcontrib
-vcs_info_wrapper() {
-  vcs_info
-  if [ -n "$vcs_info_msg_0_" ]; then
-    echo "%{$fg[grey]%}${vcs_info_msg_0_}%{$reset_color%}$del"
-  fi
-}
-RPROMPT=$'$(vcs_info_wrapper)'
+## vcs_info stuff
+#setopt prompt_subst
+#autoload -Uz vcs_info
+#zstyle ':vcs_info:*' actionformats \
+#    '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{3}|%F{1}%a%F{5}]%f '
+#zstyle ':vcs_info:*' formats       \
+#    '%F{5}(%f%s%F{5})%F{3}-%F{5}[%F{2}%b%F{5}]%f '
+#zstyle ':vcs_info:(sv[nk]|bzr):*' branchformat '%b%F{1}:%F{3}%r'
+#
+#zstyle ':vcs_info:*' enable git cvs svn
+#
+## or use pre_cmd, see man zshcontrib
+#vcs_info_wrapper() {
+#  vcs_info
+#  if [ -n "$vcs_info_msg_0_" ]; then
+#    echo "%{$fg[grey]%}${vcs_info_msg_0_}%{$reset_color%}$del"
+#  fi
+#}
+#RPROMPT=$'$(vcs_info_wrapper)'
 
 if [[ $OSTYPE = freebsd* ]]; then
 	alias ls="ls -GF"
@@ -198,12 +204,12 @@ setopt extendedglob
 
 REPORTTIME=10
 
-zstyle ':completion:*:processes' command 'ps -aux'
+#zstyle ':completion:*:processes' command 'ps -aux'
 
 export EDITOR='vim'
-export GIT_AUTHOR_EMAIL=dominik.zyla@gmail.com
+export GIT_AUTHOR_EMAIL=dom@scalefactory.com
 export GIT_AUTHOR_NAME='Dominik Zyla'
-export GIT_COMMITTER_EMAIL=dominik.zyla@gmail.com
+export GIT_COMMITTER_EMAIL=dom@scalefactory.com
 export GIT_COMMITTER_NAME='Dominik Zyla'
 export LD_LIBRARY_PATH=~/luit/lib
 LSCOLORS="ExGxFxdxCxDxDxhbadExEx"
@@ -217,9 +223,9 @@ export PATH=$PATH:$GOPATH/bin:$GOROOT/bin/go
 
 alias tmux="TERM=screen-256color-bce tmux"
 
-zstyle ':completion:*' max-errors 1
-zstyle ':completion:*' original true
-zstyle ':completion:*' completer _complete _correct _approximate
+#zstyle ':completion:*' max-errors 1
+#zstyle ':completion:*' original true
+#zstyle ':completion:*' completer _complete _correct _approximate
 
 if [ -r ${HOME}/.zshrc_local ]; then
 	. ${HOME}/.zshrc_local

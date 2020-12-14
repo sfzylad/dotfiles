@@ -35,13 +35,16 @@ set runtimepath+=~/.vim/bundle/neobundle.vim/
 call neobundle#begin(expand('~/.vim/bundle/'))
 
 " Language plugins
+NeoBundle 'carlitux/deoplete-ternjs', { 'build': { 'mac': 'npm install -g tern', 'unix': 'npm install -g tern' }}
+NeoBundle 'ternjs/tern_for_vim'
 NeoBundle "vim-ruby/vim-ruby"
 NeoBundle "pangloss/vim-javascript"
 NeoBundle "wokalski/autocomplete-flow"
 NeoBundle "empanda/vim-varnish"
 NeoBundle "Glench/Vim-Jinja2-Syntax"
-"NeoBundle "fatih/vim-go"
-NeoBundle 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+NeoBundle "fatih/vim-go"
+NeoBundle 'mdempsky/gocode', { 'rtp': 'nvim' }
+"NeoBundle 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 NeoBundle "rodjek/vim-puppet"
 NeoBundle "tpope/vim-markdown"
 NeoBundle "rust-lang/rust.vim"
@@ -56,6 +59,11 @@ NeoBundle "rking/ag.vim"
 NeoBundle "scrooloose/syntastic"
 NeoBundle "tpope/vim-eunuch"
 NeoBundle "tpope/vim-fugitive"
+
+NeoBundle 'dracula/vim', { 'name': 'dracula' }
+
+NeoBundle 'neoclide/coc.nvim', {'branch': 'release'}
+
 "
 "
 " tagbar
@@ -103,9 +111,8 @@ NeoBundle 'flazz/vim-colorschemes'
 
 
 NeoBundle 'davidhalter/jedi-vim'
-NeoBundle 'Shougo/deoplete.nvim'
-NeoBundle 'zchee/deoplete-go', {'build': {'unix': 'make'}}
-NeoBundle 'zchee/deoplete-jedi'
+"NeoBundle 'zchee/deoplete-go', {'build': {'unix': 'make'}}
+"NeoBundle 'zchee/deoplete-jedi'
 
 " Let NeoBundle manage NeoBundle
 " Required:
@@ -117,22 +124,17 @@ NeoBundle 'roxma/vim-hug-neovim-rpc'
 NeoBundle 'scrooloose/nerdtree'
 NeoBundle 'pearofducks/ansible-vim'
 
+NeoBundle 'tsandall/vim-rego'
+
 NeoBundle 'google/vim-jsonnet'
 NeoBundle 'editorconfig/editorconfig-vim'
 NeoBundle 'lambdalisue/vim-pyenv'
 NeoBundle 'jmcantrell/vim-virtualenv'
-NeoBundle 'w0rp/ale'
+"NeoBundle 'w0rp/ale'
 
 NeoBundle 'christoomey/vim-tmux-navigator'
 
-" This language client actually makes use of a binary, hence the `install.sh`.
-" We also need the `next` branch in order to specify
-" a language server's TCP port at the time of writing
-NeoBundle 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
-
+"NeoBundle 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " Do not load vim-pyenv until *.py is opened and
 " make sure that it is loaded after jedi-vim is loaded.
@@ -168,16 +170,22 @@ endif
 
 set t_Co=256
 " solarized options
-"set background=dark
-"let g:solarized_termcolors = 256
-"let g:solarized_visibility = "medium"
-"let g:solarized_contrast = "hard"
+set background=dark
+let g:solarized_termcolors = 256
+let g:solarized_visibility = "medium"
+let g:solarized_contrast = "medium"
 "set background=light
 
-"set background=dark
-"colorscheme solarized
+set background=dark
+"colorscheme solarized8_dark
 "colorscheme molokai
-colorscheme onedark
+"colorscheme onedark
+
+"let g:dracula_italic = 0
+"
+colorscheme dracula
+"colorscheme jellybeans
+set nolist
 
 "let g:molokai_original = 1
 let g:rehash256 = 1
@@ -227,7 +235,6 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 let g:NERDTreeWinPos = "left"
 "set guifont=Monaco:h13
 
-set number
 let g:pymode_rope = 0
 let g:pymode_rope_goto_definition_cmd = 'vnew'
 
@@ -288,7 +295,7 @@ set tags+=tags;
 
 
 set iskeyword=-,:,@,48-57,_,192-255
-set norelativenumber
+set relativenumber
 
 set t_Co=256
 let g:airline#extensions#tabline#enabled = 1
@@ -319,29 +326,59 @@ au FileType go nmap <leader>t <Plug>(go-test)
 au FileType go nmap <leader>c <Plug>(go-coverage)
 
 
-au FileType go nmap <silent><Leader>L :GoLint<CR>
+au FileType go nmap <silent><Leader>L :GoMetaLinter<CR>
 au FileType go nmap <silent><Leader>v :GoVet<CR>
 au FileType go nmap <silent><Leader>d :GoDeclsDir<CR><Paste>
 au FileType go nmap <silent><Leader>s :GoDecls<CR><Paste>
 
+""" Toggle spell checking with ctrl-s ctrl-s
+set spelllang=en_gb
+nmap <silent> <leader>s :set spell!<CR>
+" Automatically enable spell check on .md files
+" https://robots.thoughtbot.com/vim-spell-checking
+autocmd BufRead,BufNewFile *.md setlocal spell
+autocmd BufRead,BufNewFile *.wiki setlocal spell
+autocmd FileType gitcommit setlocal spell
+
 let g:go_fmt_autosave = 1
+let g:go_highlight_types = 1
+
 let g:go_highlight_functions = 1
 let g:go_highlight_function_calls = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_extra_types = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_structs = 1
 let g:go_highlight_fields = 1
+let g:go_highlight_build_constraints = 1
+let g:go_highlight_generate_tags = 1
+
+
 " automatically highlight matching identifiers
 let g:go_auto_sameids = 1
 
 let g:go_gocode_propose_builtins = 1
+"let g:go_gocode_propose_source = 1
+let g:go_auto_type_info = 1
 let g:go_gocode_unimported_packages=1
 let g:go_fmt_command = "goimports"
+let g:go_list_autoclose = 1
 let g:go_metalinter_autosave_enabled = ['golint', 'vet', 'gotype']
-let g:go_metalinter_autosave = 1
-let g:syntastic_go_checkers = ['golint', 'vet', 'gotype']
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck']
+let g:go_metalinter_deadline = "5s"
+let g:syntastic_go_checkers = ['go', 'golint', 'govet', 'errcheck']
+"let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 let g:go_auto_type_info = 0
-let g:go_autodetect_gopath = 1
+let g:go_autodetect_gopath = 0
+let g:go_addtags_transform = "snakecase"
+" gometalinter configuration
+let g:go_metalinter_command = "gometalinter --enable=gotype --enable=vet --enable=golint --disable=interfacer --disable=staticcheck --disable=gocyclo --disable=goconst --disable=deadcode --disable=unconvert --disable=structcheck --disable=gosec --disable=ineffassign --disable=varcheck --disable=maligned -t --exclude='exported method.*should have comment or be unexported'"
+let g:go_metalinter_autosave_command = "gometalinter --enable=gotype --enable=vet --enable=golint -t --exclude='exported method.*should have comment or be unexported'"
+let g:go_metalinter_deadline = "20s"
+let g:go_metalinter_autosave = 1
+
+" Fix for location list when vim-go is used together with Syntastic
+let g:go_list_type = "quickfix"
 
 let g:neosnippet#enable_snipmate_compatibility = 1
 
@@ -375,20 +412,19 @@ set nocursorline
 set scrolloff=5
 
 set mouse=
-let g:python_host_prog='/Users/dzyla/.pyenv/versions/neovim2/bin/python'
-let g:python3_host_prog='/Users/dzyla/.pyenv/versions/neovim36/bin/python'
+set completeopt+=noselect
+
+"let g:python_host_prog='/Users/zylad/.pyenv/versions/neovim2/bin/python'
+let g:python3_host_prog='/usr/local/bin/python3'
+let g:ruby_host_prog='/Users/zylad/.rbenv/shims/ruby'
 let g:deoplete#enable_at_startup = 1
-let g:deoplete#enable_refresh_always=0
-call deoplete#custom#option('smart_case', v:true)
-"" <C-h>, <BS>: close popup and delete backword char.
-"inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
-"inoremap <expr><BS>  deoplete#smart_close_popup()."\<C-h>"
-"
-"" <CR>: close popup and save indent.
-"inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-"function! s:my_cr_function() abort
-"  return deoplete#close_popup() . "\<CR>"
-"endfunction
+let g:deoplete#sources#go#gocode_binary = $GOPATH.'/bin/gocode'
+let g:deoplete#sources#go#sort_class = ['package', 'func', 'type', 'var', 'const']
+"call deoplete#custom#option({'max_list': 500, })
+let g:deoplete#enable_ignore_case = 1
+let g:deoplete#enable_camel_case = 1
+let g:deoplete#max_abbr_width = 0
+let g:deoplete#max_menu_width = 0
 
 let g:pymode_lint_cwindow = 0
 
@@ -494,6 +530,16 @@ if has("autocmd")
                 \ endif
 endif " has("autocmd")
 
+function! StrTrim(txt)
+  return substitute(a:txt, '^\n*\s*\(.\{-}\)\n*\s*$', '\1', '')
+endfunction
+
+let g:flow_path = StrTrim(system('PATH=$(npm bin):$PATH && which flow'))
+
+if g:flow_path != 'flow not found'
+  let g:deoplete#sources#flow#flow_bin = g:flow_path
+endif
+
 "let g:syntastic_python_checker="flake8"
 "unlet g:syntastic_python_checker
 set statusline+=%#warningmsg#
@@ -509,26 +555,70 @@ set expandtab
 
 "autocmd BufWritePost *.py call Flake8()
 
-noremap <Up> <NOP>
-noremap <Down> <NOP>
-noremap <Left> <NOP>
-noremap <Right> <NOP>
-
-" Tell the language client to use the default IP and port
-" that Solargraph runs on
-let g:LanguageClient_serverCommands = {
-    \ 'ruby': ['tcp://localhost:7658']
-    \ }
-
-" Don't send a stop signal to the server when exiting vim.
-" This is optional, but I don't like having to restart Solargraph
-" every time I restart vim.
-let g:LanguageClient_autoStop = 0
-
 " vim-virtualenv
 let g:virtualenv_auto_activate = 1
 
-set completeopt=menuone,longest,preview
+"set completeopt=menuone,longest,preview
+set completeopt=menuone,longest
+
+" JS
+
+let g:deoplete#sources#ternjs#tern_bin='/usr/local/bin/tern'
+let g:deoplete#sources#ternjs#timeout = 1
+let g:deoplete#sources#ternjs#types = 1
+let g:tern_map_keys=1
+"show argument hints
+let g:tern_show_argument_hints='on_hold'
+let g:deoplete#sources#ternjs#types = 1
+let g:deoplete#sources#ternjs#depths = 1
+let g:deoplete#sources#ternjs#docs = 1
+
+" When on, only completions that match the current word at the given point will
+" be returned. Turn this off to get all results, so that you can filter on the
+" client side. Default: 1
+let g:deoplete#sources#ternjs#filter = 0
+
+" Whether to use a case-insensitive compare between the current word and
+" potential completions. Default 0
+let g:deoplete#sources#ternjs#case_insensitive = 1
+
+
+" When completing a property and no completions are found, Tern will use some
+" heuristics to try and return some properties anyway. Set this to 0 to
+" turn that off. Default: 1
+let g:deoplete#sources#ternjs#guess = 0
+
+" Determines whether the result set will be sorted. Default: 1
+let g:deoplete#sources#ternjs#sort = 0
+
+" When disabled, only the text before the given position is considered part of
+" the word. When enabled (the default), the whole variable name that the cursor
+" is on will be included. Default: 1
+let g:deoplete#sources#ternjs#expand_word_forward = 0
+
+
+" Whether to ignore the properties of Object.prototype unless they have been
+" spelled out by at least two characters. Default: 1
+let g:deoplete#sources#ternjs#omit_object_prototype = 0
+
+" Whether to include JavaScript keywords when completing something that is not
+" a property. Default: 0
+let g:deoplete#sources#ternjs#include_keywords = 1
+
+" If completions should be returned when inside a literal. Default: 1
+let g:deoplete#sources#ternjs#in_literal = 0
+
+
+"Add extra filetypes
+let g:deoplete#sources#ternjs#filetypes = [
+                \ 'jsx',
+                \ 'javascript.jsx',
+                \ 'vue',
+                \ '...'
+                \ ]
+
+
+
 
 " ale
 let g:ale_open_list = 'on_save'
@@ -541,3 +631,7 @@ let g:ale_linters = {
   \ 'python': ['flake8', 'pylint'] ,
   \ }
 let g:ale_python_black_options = '-l79 --exclude /(\.git|\.hg|\.mypy_cache|\.tox|\.venv|_build|buck-out|build|dist|\.json)/'
+let g:go_gometalinter_options = "--enable=gotype --enable=vet --enable=golint -t --exclude='exported method.* should have comment or be unexported\.'"
+
+
+
