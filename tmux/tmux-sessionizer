@@ -3,7 +3,7 @@
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(find ~/src -mindepth 1 -maxdepth 1 -type d | fzf)
+    selected=$(find ~/code ~/code/rust ~/.config  -mindepth 1 -maxdepth 1 -type d | tv --no-preview)
 fi
 
 if [[ -z $selected ]]; then
